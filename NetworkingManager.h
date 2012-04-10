@@ -5,6 +5,7 @@
 #include <QtNetwork/QUdpSocket>
 
 #include "messages.h"
+#include "messages-serializers.h"
 
 class NetworkingManager
 {
