@@ -3,6 +3,7 @@
 NetworkingManager::NetworkingManager(quint16 port)
 {
     socket = new QUdpSocket();
+    this->port = port;
 }
 
 NetworkingManager::~NetworkingManager()
