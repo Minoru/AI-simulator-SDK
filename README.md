@@ -4,4 +4,4 @@ network messages.
 
   1. https://github.com/SmirnoffYM/AI-simulator
 
-You can find example bot that uses that SDK in example/ directory
+You can find example bot that uses that SDK under `example/`
