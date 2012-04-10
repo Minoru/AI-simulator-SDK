@@ -1,22 +1,30 @@
 #include "messages-serializers.h"
 
-QDataStream &serializeMessageMove(MessageMove *msg)
+void setupHeader(Message *msg, QDataStream &stream)
 {
 }
 
-QDataStream &serializeMessageTurn(MessageTurn *msg)
+QByteArray *serializeMessageMove(MessageMove *msg)
 {
 }
 
-QDataStream &serializeMessageChangeSize(MessageChangeSize *msg)
+QByteArray *serializeMessageTurn(MessageTurn *msg)
 {
 }
 
-QDataStream &serializeMessageChangeColor(MessageChangeColor *msg)
+QByteArray *serializeMessageChangeSize(MessageChangeSize *msg)
 {
 }
 
-QDataStream &serializeMessageWhoIsThere(MessageWhoIsThere *msg)
+QByteArray *serializeMessageChangeColor(MessageChangeColor *msg)
+{
+}
+
+QByteArray *serializeMessageWhoIsThere(MessageWhoIsThere *msg)
+{
+}
+
+QByteArray *serializeMessageParameterReport(MessageParameterReport *msg)
 {
 }
 
