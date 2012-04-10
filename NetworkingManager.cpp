@@ -15,7 +15,7 @@ void NetworkingManager::send(Message *msg)
     // TODO: implement that method
 
     // Ensure port is correct
-    msg->setPort(port);
+    msg->port = port;
 }
 
 bool NetworkingManager::hasPendingMessages()
