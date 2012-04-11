@@ -76,8 +76,10 @@ void NetworkingManager::send(Message *msg)
 
     if(datagram) {
         socket->writeDatagram(datagram->constData(), datagram->size(),
-                QHostAddress::LocalHost, port);
+                QHostAddress::LocalHost, 9000);
     }
+    
+    delete datagram;
 }
 
 bool NetworkingManager::hasPendingMessages()
@@ -108,6 +110,7 @@ MessageType NetworkingManager::receive(Message *msg)
     if(version != 1) {
         // FIXME: stick qDebug in here
         // VERSION MISMATCH, CAN'T HANDLE THAT
+        msg = NULL;
         return MsgUndefined;
     }
 
