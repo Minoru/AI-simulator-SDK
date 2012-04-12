@@ -10,8 +10,11 @@
 class NetworkingManager
 {
 public:
-    NetworkingManager(quint16);
-    ~NetworkingManager();
+    static NetworkingManager& getInstance(quint16 port)
+    {
+        static NetworkingManager instance(port);
+        return instance;
+    }
 
     void send(Message *);
     bool hasPendingMessages();
@@ -20,6 +23,12 @@ public:
 private:
     quint16 port;
     QUdpSocket *socket;
+
+    NetworkingManager(quint16);
+    NetworkingManager(NetworkingManager const&);
+    ~NetworkingManager();
+
+    void operator=(NetworkingManager const&);
 };
 
 #endif

@@ -13,8 +13,6 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    srand((unsigned int)argv);
-
     Manager *manager = new Manager(&a, QString(argv[1]));
     QObject::connect(manager, SIGNAL(stop()), &a, SLOT(quit()));
     QTimer::singleShot(0, manager, SLOT(run()));

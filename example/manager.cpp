@@ -19,6 +19,8 @@ Manager::Manager(QObject *parent, QString configurationFile) :
 void Manager::run()
 {
     if (configurationLoaded) {
+        //TODO: at this point we must process incoming messages from the simulator
+
         action();
         QTimer::singleShot(PERFORM_ACTION_FREQUENCY, this, SLOT(run()));
     } else {
