@@ -1,16 +1,5 @@
 #include "NetworkingManager.h"
 
-NetworkingManager::NetworkingManager(quint16 port)
-{
-    socket = new QUdpSocket();
-    this->port = port;
-}
-
-NetworkingManager::~NetworkingManager()
-{
-    socket->~QUdpSocket();
-}
-
 MessageThereYouSee *parseMessageThereYouSee(QDataStream &stream)
 {
     MessageThereYouSee *msg = new MessageThereYouSee();
@@ -35,6 +24,17 @@ MessageThereYouSee *parseMessageThereYouSee(QDataStream &stream)
         msg->objects.push_back(obj);
     }
     return msg;
+}
+
+NetworkingManager::NetworkingManager(quint16 port)
+{
+    socket = new QUdpSocket();
+    this->port = port;
+}
+
+NetworkingManager::~NetworkingManager()
+{
+    socket->~QUdpSocket();
 }
 
 void NetworkingManager::send(Message *msg)

@@ -18,11 +18,15 @@ Robot::Robot():
 
 void Robot::move(int x, int y)
 {
+    NetworkingManager *mngr = new NetworkingManager(portNumber);
+
     MessageMove m;
     m.coordX = x;
     m.coordY = y;
 
-    NetworkingManager::getInstance(portNumber).send(&m);
+    mngr->send(&m);
+
+    delete mngr;
 
     coords = std::pair<int, int>(x, y);
 }
