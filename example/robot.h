@@ -4,9 +4,6 @@
 #include <QColor>
 #include <QUdpSocket>
 #include <QVariant>
-#include <qjson/parser.h>
-#include <qjson/serializer.h>
-#include <qjson/qobjecthelper.h>
 #include "../NetworkingManager.h"
 #include "constants.h"
 
@@ -17,16 +14,13 @@ public:
 
 private:
     unsigned int portNumber;                    //also it's robot's id
-
-    //TODO: We need to replace QColor by some structure, cuz QColor is dependent on QtGui module
-
     QColor color;                               //object's color
     unsigned int size;                          //diameter in special pixels (1/60 of real pixel)
     double orientation;                         //orientation (in degrees)
     Intersection intersection;                  //type of intersection
     std::pair<int, int> coords;                 //robot coordinates, first - x, second - y;
     std::pair<std::string, double> *parameters; //custom robot parameters
-    NetworkingManager *mngr;
+    NetworkingManager *network;
 
 public:
     void move(int x, int y);
@@ -77,6 +71,11 @@ public:
             return std::pair<std::string, double>();
     }
 
+    NetworkingManager * getNetwork()
+    {
+        return network;
+    }
+
     // setters
 
     void setSize(int size)
@@ -105,6 +104,10 @@ public:
     void setPortNumber(unsigned int port)
     {
         portNumber = port;
+
+        if (network != NULL)
+           delete network;
+        network = new NetworkingManager(port);
     }
 
     void setIntersection(Intersection intersection)

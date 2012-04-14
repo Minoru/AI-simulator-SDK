@@ -14,19 +14,15 @@ Robot::Robot():
         char symbol = static_cast<char>(65 + i);
         parameters[i] = std::pair<std::string, double>(&symbol, 0);
     }
+    network = NULL;
 }
 
 void Robot::move(int x, int y)
 {
-    NetworkingManager *mngr = new NetworkingManager(portNumber);
-
     MessageMove m;
     m.coordX = x;
     m.coordY = y;
-
-    mngr->send(&m);
-
-    delete mngr;
+    network->send(&m);
 
     coords = std::pair<int, int>(x, y);
 }

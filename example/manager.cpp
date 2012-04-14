@@ -20,7 +20,6 @@ void Manager::run()
 {
     if (configurationLoaded) {
         //TODO: at this point we must process incoming messages from the simulator
-
         action();
         QTimer::singleShot(PERFORM_ACTION_FREQUENCY, this, SLOT(run()));
     } else {
@@ -32,6 +31,8 @@ void Manager::run()
 
 void Manager::action()
 {
+    //TODO: replace the code below by yours
+
     srand(static_cast<unsigned>(time(0)));
 
     if (fabs(robot->getCoords().first - robot->getParameter(0).second) <
@@ -57,7 +58,7 @@ void Manager::action()
 }
 
 void Manager::loadConfiguration(QString configurationFile)
-{
+{  
     // Load file contents (without commented strings) to configStringList
     QFile config(QString("robots/") + configurationFile);
     QStringList configStringList = QStringList();
