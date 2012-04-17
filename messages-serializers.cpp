@@ -3,9 +3,10 @@
 void setupHeader(Message *msg, QDataStream &stream)
 {
     // version: 1
-    stream << (quint8)1;
+    stream << static_cast<quint8>(1);
     // other header infortmation
-    stream << (quint32)msg->num << (quint16)msg->port << (quint8)msg->type;
+    stream << static_cast<quint32>(msg->num) << static_cast<quint16>(msg->port)
+           << static_cast<quint8>(msg->type);
 }
 
 QByteArray *serializeMessageMove(MessageMove *msg)
@@ -14,7 +15,7 @@ QByteArray *serializeMessageMove(MessageMove *msg)
     QDataStream stream(arr, QIODevice::WriteOnly);
 
     setupHeader(msg, stream);
-    stream << (quint32)msg->coordX << (quint32)msg->coordY;
+    stream << static_cast<quint32>(msg->coordX) << static_cast<quint32>(msg->coordY);
 
     return arr;
 }
@@ -25,7 +26,7 @@ QByteArray *serializeMessageTurn(MessageTurn *msg)
     QDataStream stream(arr, QIODevice::WriteOnly);
 
     setupHeader(msg, stream);
-    stream << (quint32)(msg->degrees * 3600);
+    stream << static_cast<quint32>(msg->degrees * 3600);
 
     return arr;
 }
@@ -36,7 +37,7 @@ QByteArray *serializeMessageChangeSize(MessageChangeSize *msg)
     QDataStream stream(arr, QIODevice::WriteOnly);
 
     setupHeader(msg, stream);
-    stream << (quint32)msg->diameter;
+    stream << static_cast<quint32>(msg->diameter);
 
     return arr;
 }
@@ -47,7 +48,8 @@ QByteArray *serializeMessageChangeColor(MessageChangeColor *msg)
     QDataStream stream(arr, QIODevice::WriteOnly);
 
     setupHeader(msg, stream);
-    stream << (quint8)msg->red << (quint8)msg->green << (quint8)msg->blue;
+    stream << static_cast<quint8>(msg->red) << static_cast<quint8>(msg->green)
+           << static_cast<quint8>(msg->blue);
 
     return arr;
 }
@@ -58,7 +60,8 @@ QByteArray *serializeMessageWhoIsThere(MessageWhoIsThere *msg)
     QDataStream stream(arr, QIODevice::WriteOnly);
 
     setupHeader(msg, stream);
-    stream << (quint32)msg->coordX << (quint32)msg->coordY << (quint32)msg->radius;
+    stream << static_cast<quint32>(msg->coordX) << static_cast<quint32>(msg->coordY)
+           << static_cast<quint32>(msg->radius);
 
     return arr;
 }
@@ -69,7 +72,8 @@ QByteArray *serializeMessageParameterReport(MessageParameterReport *msg)
     QDataStream stream(arr, QIODevice::WriteOnly);
 
     setupHeader(msg, stream);
-    stream << (quint8)msg->id << (quint32)msg->integral << (quint32)msg->real;
+    stream << static_cast<quint8>(msg->id) << static_cast<quint32>(msg->integral)
+           << static_cast<quint32>(msg->real);
 
     return arr;
 }
