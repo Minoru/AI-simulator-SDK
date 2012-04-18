@@ -1,31 +1,5 @@
 #include "NetworkingManager.h"
 
-MessageThereYouSee *parseMessageThereYouSee(QDataStream &stream)
-{
-    MessageThereYouSee *msg = new MessageThereYouSee();
-    quint32 count;
-    stream >> count;
-    msg->objects.reserve(count);
-    MessageObject obj;
-    quint32 x, y, diameter, seconds;
-    quint8 red, green, blue;
-    for(unsigned int i = 0; i < count; i++) {
-        stream >> x >> y >> diameter >> seconds;
-        stream >> red >> green >> blue;
-
-        obj.coordX = x;
-        obj.coordY = y;
-        obj.diameter = diameter;
-        obj.degrees = static_cast<double>(seconds) / 3600;
-        obj.red = red;
-        obj.green = green;
-        obj.blue = blue;
-
-        msg->objects.push_back(obj);
-    }
-    return msg;
-}
-
 NetworkingManager::NetworkingManager(quint16 port)
 {
     socket = new QUdpSocket();
@@ -121,15 +95,43 @@ MessageType NetworkingManager::receive(Message *msg)
 
     switch(static_cast<MessageType>(msg_type)) {
     case MsgBump:
+        {
         msg = new MessageBump();
+        MessageBump *m = static_cast<MessageBump *>(msg);
+
         quint32 x, y;
         stream >> x >> y;
-        (static_cast<MessageBump *>(msg))->coordX = x;
-        (static_cast<MessageBump *>(msg))->coordY = y;
+        m->coordX = x;
+        m->coordY = y;
+        };
         break;
 
     case MsgThereYouSee:
-        msg = parseMessageThereYouSee(stream);
+        {
+        msg = new MessageThereYouSee();
+        MessageThereYouSee *m = static_cast<MessageThereYouSee *>(msg);
+
+        quint32 count;
+        stream >> count;
+        m->objects.reserve(count);
+        MessageObject obj;
+        quint32 x, y, diameter, seconds;
+        quint8 red, green, blue;
+        for(unsigned int i = 0; i < count; i++) {
+            stream >> x >> y >> diameter >> seconds;
+            stream >> red >> green >> blue;
+
+            obj.coordX = x;
+            obj.coordY = y;
+            obj.diameter = diameter;
+            obj.degrees = static_cast<double>(seconds) / 3600;
+            obj.red = red;
+            obj.green = green;
+            obj.blue = blue;
+
+            m->objects.push_back(obj);
+        }
+        };
         break;
 
     default:
