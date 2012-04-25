@@ -121,21 +121,21 @@ void Manager::loadConfiguration(QString configurationFile)
     }
 
     // Check intersection type
-    QString intersection = configStringList.at(7);
+    QString intersection = configStringList.at(8);
     if (intersection != "0" && intersection != "1" && intersection != "2") {
         std::cout << "Invalid intersection type\n";
         return;
     }
 
     // Check orientation
-    double orientation = configStringList.at(8).toDouble(&ok);
+    double orientation = configStringList.at(9).toDouble(&ok);
     if (!ok) {
         std::cout << "Invalid orientation\n";
         return;
     }
 
     // Check color
-    QColor color = QColor(configStringList.at(9));
+    QColor color = QColor(configStringList.at(10));
     if (!color.isValid()) {
         std::cout << "Invalid color\n";
         return;
@@ -145,7 +145,7 @@ void Manager::loadConfiguration(QString configurationFile)
     std::pair<std::string, double> *parameters =
             new std::pair<std::string, double>[CUSTOM_PARAMETERS_QUANTITY];
     for (int i = 0; i < CUSTOM_PARAMETERS_QUANTITY; i++) {
-        QString line = configStringList.at(10+i);
+        QString line = configStringList.at(11+i);
         if (!line.contains(QRegExp("^(\\d|\\.)+;(\\w|\\s)+$"))) {
             std::cout << "Invalid parameter " << i+1 << " \n";
             return;
