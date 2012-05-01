@@ -1,5 +1,6 @@
 #include <QtCore/QCoreApplication>
 #include <QTimer>
+#include <QRegExp>
 #include <iostream>
 #include "manager.h"
 
@@ -7,7 +8,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    if (!QString(argv[1]).contains(QRegExp("^(\\d){4}(\\.)(\\d)$"))) {
+    if (!QString(argv[1]).contains(QRegExp("^(\\d){4}(\\.)env$"))) {
         std::cout << "Error! Invalid profile name.\n";
         return 0;
     }
