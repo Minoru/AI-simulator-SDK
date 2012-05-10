@@ -25,6 +25,61 @@ void Robot::move(int x, int y)
     network->send(&m);
 
     coords = std::pair<int, int>(x, y);
+
+    // FIXME: should we wait for MsgBump and return some bool to indicate success or fail?
+}
+
+void Robot::turn(double degrees)
+{
+    MessageTurn m;
+    m.degrees = degrees;
+    network->send(&m);
+
+    // TODO: update robot's internal state
+}
+
+void Robot::changeDiameter(unsigned int diameter)
+{
+    MessageChangeSize m;
+    m.diameter = diameter;
+    network->send(&m);
+
+    // TODO: update robot's internal state
+}
+
+void Robot::changeColor(char red, char green, char blue)
+{
+    MessageChangeColor m;
+    m.red = red;
+    m.green = green;
+    m.blue = blue;
+    network->send(&m);
+
+    // TODO: update robot's internal state
+}
+
+void Robot::whoIsThere(unsigned int x, unsigned int y, unsigned int radius)
+{
+    MessageWhoIsThere m;
+    m.coordX = x;
+    m.coordY = y;
+    m.radius = radius;
+    network->move(&m);
+
+    // TODO: update robot's internal state
+
+    // FIXME: should that thing wait for ThereYouSee message and return array of objects?
+}
+
+void Robot::reportParameter(char id, int integral, unsigned int real)
+{
+    MessageParameterReport m;
+    m.id = id;
+    m.integral = integral;
+    m.real = real;
+    network->send(&m);
+
+    // TODO: update robot's internal state
 }
 
 /* Limit line length to 100 characters; highlight 99th column
