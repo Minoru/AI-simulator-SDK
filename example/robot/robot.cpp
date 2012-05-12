@@ -68,7 +68,7 @@ void Robot::changeColor(char red, char green, char blue)
     // TODO: update robot's internal state
 }
 
-void Robot::whoIsThere(unsigned int x, unsigned int y, unsigned int radius)
+std::vector<MessageObject> Robot::whoIsThere(unsigned int x, unsigned int y, unsigned int radius)
 {
     MessageWhoIsThere m;
     m.coordX = x;
@@ -76,9 +76,17 @@ void Robot::whoIsThere(unsigned int x, unsigned int y, unsigned int radius)
     m.radius = radius;
     network->send(&m);
 
-    // TODO: update robot's internal state
-
-    // FIXME: should that thing wait for ThereYouSee message and return array of objects?
+    Message *msg = NULL;
+    std::vector<MessageObject> results;
+    MessageType type = waitForMessage(msg);
+    if (type == MsgThereYouSee) {
+        MessageThereYouSee *m = static_cast<MessageThereYouSee *>(msg);
+        results.resize(m->objects.size());
+        std::vector<MessageObject>::iterator it;
+        for(it = m->objects.begin(); it < m->objects.end(); it++)
+            results.push_back(*it);
+    }
+    return results;
 }
 
 void Robot::reportParameter(char id, int integral, unsigned int real)

@@ -30,7 +30,7 @@ public:
     void turn(double degrees);
     void changeDiameter(unsigned int diameter);
     void changeColor(char red, char green, char blue);
-    void whoIsThere(unsigned int x, unsigned int y, unsigned int radius);
+    std::vector<MessageObject> whoIsThere(unsigned int x, unsigned int y, unsigned int radius);
     void reportParameter(char id, int integral, unsigned int real);
     bool isStart();
     bool isPause();
