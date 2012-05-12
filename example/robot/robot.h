@@ -23,6 +23,7 @@ private:
     std::pair<std::string, double> *parameters; //custom robot parameters
     NetworkingManager *network;
     ModellingState state;
+
     void checkForStateChanges();
     MessageType waitForMessage(Message *);
 
@@ -30,9 +31,11 @@ public:
     bool move(int x, int y);
     void turn(double degrees);
     void changeDiameter(unsigned int diameter);
-    void changeColor(char red, char green, char blue);
+    void changeColor(char red, char green, char blue);  
     std::vector<MessageObject> whoIsThere(unsigned int x, unsigned int y, unsigned int radius);
+private:
     void reportParameter(char id, int integral, unsigned int real);
+public:
     bool isStart();
     bool isPause();
     bool isStop();
@@ -139,6 +142,10 @@ public:
         if (parameter < CUSTOM_PARAMETERS_QUANTITY)
             parameters[parameter] =
                     std::pair<std::string, double>(parameters[parameter].first, value);
+
+        // accuracy = 5
+        reportParameter(static_cast<char>(parameter), static_cast<int>(value),
+                        static_cast<int>((value - static_cast<int>(value)) * 100000) % 100000);
     }
 };
 

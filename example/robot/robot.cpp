@@ -63,7 +63,7 @@ void Robot::turn(double degrees)
     m.degrees = degrees;
     network->send(&m);
 
-    // TODO: update robot's internal state
+    orientation = degrees;
 }
 
 void Robot::changeDiameter(unsigned int diameter)
@@ -72,7 +72,7 @@ void Robot::changeDiameter(unsigned int diameter)
     m.diameter = diameter;
     network->send(&m);
 
-    // TODO: update robot's internal state
+    size = diameter;
 }
 
 void Robot::changeColor(char red, char green, char blue)
@@ -83,7 +83,7 @@ void Robot::changeColor(char red, char green, char blue)
     m.blue = blue;
     network->send(&m);
 
-    // TODO: update robot's internal state
+    color = QColor(static_cast<int>(red), static_cast<int>(green), static_cast<int>(blue));
 }
 
 std::vector<MessageObject> Robot::whoIsThere(unsigned int x, unsigned int y, unsigned int radius)
@@ -114,8 +114,6 @@ void Robot::reportParameter(char id, int integral, unsigned int real)
     m.integral = integral;
     m.real = real;
     network->send(&m);
-
-    // TODO: update robot's internal state
 }
 
 bool Robot::isStart()
