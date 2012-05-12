@@ -30,8 +30,8 @@ public:
     bool move(int x, int y);
     void turn(double degrees);
     void changeDiameter(unsigned int diameter);
-    void changeColor(char red, char green, char blue);
-    void whoIsThere(unsigned int x, unsigned int y, unsigned int radius);
+    void changeColor(char red, char green, char blue);  
+    std::vector<MessageObject> whoIsThere(unsigned int x, unsigned int y, unsigned int radius);
 private:
     void reportParameter(char id, int integral, unsigned int real);
 public:
