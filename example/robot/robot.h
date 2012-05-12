@@ -21,6 +21,7 @@ private:
     std::pair<int, int> coords;                 //robot coordinates, first - x, second - y;
     std::pair<std::string, double> *parameters; //custom robot parameters
     NetworkingManager *network;
+    ModellingState state;
 
 public:
     void move(int x, int y);
@@ -29,6 +30,9 @@ public:
     void changeColor(char red, char green, char blue);
     void whoIsThere(unsigned int x, unsigned int y, unsigned int radius);
     void reportParameter(char id, int integral, unsigned int real);
+    bool isStart();
+    bool isPause();
+    bool isStop();
 
 public:
     // getters

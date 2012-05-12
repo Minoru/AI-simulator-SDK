@@ -6,7 +6,8 @@ Robot::Robot():
     size(0),
     orientation(0),
     intersection(AllowedForSameColor),
-    coords(0, 0)
+    coords(0, 0),
+    state(Started)
 {
     //default constructor
     parameters = new std::pair<std::string, double>[CUSTOM_PARAMETERS_QUANTITY];
@@ -80,6 +81,28 @@ void Robot::reportParameter(char id, int integral, unsigned int real)
     network->send(&m);
 
     // TODO: update robot's internal state
+}
+
+bool Robot::isStart()
+{
+    checkForStateChanges();
+    return (state == Started);
+}
+
+bool Robot::isPause()
+{
+    checkForStateChanges();
+    return (state == Paused);
+}
+
+bool Robot::isStop()
+{
+    checkForStateChanges();
+    return (state == Stopped);
+}
+
+void checkForStateChanges()
+{
 }
 
 /* Limit line length to 100 characters; highlight 99th column

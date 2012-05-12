@@ -12,6 +12,7 @@
 #define CUSTOM_PARAMETERS_QUANTITY  16      //number of custom robot params
 
 enum Intersection { Allowed, Denied, AllowedForSameColor };
+enum ModellingState {Started, Paused, Stopped};
 
 /* Define some non-crossplatform math constants: */
 
