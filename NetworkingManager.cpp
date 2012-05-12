@@ -147,6 +147,11 @@ MessageType NetworkingManager::receive(Message *msg)
     return msg->type;
 }
 
+bool NetworkingManager::waitForReadyRead(int msecs)
+{
+    return socket->waitForReadyRead(msecs);
+}
+
 /* Limit line length to 100 characters; highlight 99th column
  * vim: set textwidth=100 colorcolumn=-1:
  */

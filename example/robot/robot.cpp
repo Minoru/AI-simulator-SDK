@@ -18,7 +18,8 @@ Robot::Robot():
     network = NULL;
 }
 
-void Robot::move(int x, int y)
+/* Returns true if we bumped into something */
+bool Robot::move(int x, int y)
 {
     MessageMove m;
     m.coordX = x;
@@ -27,7 +28,15 @@ void Robot::move(int x, int y)
 
     coords = std::pair<int, int>(x, y);
 
-    // FIXME: should we wait for MsgBump and return some bool to indicate success or fail?
+    Message *msg = NULL;
+    MessageType type = waitForMessage(msg);
+    if (type == MsgBump) {
+        MessageBump *m = static_cast<MessageBump *>(msg);
+        coords = std::pair<int, int>(m->coordX, m->coordY);
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void Robot::turn(double degrees)
@@ -112,6 +121,31 @@ void Robot::checkForStateChanges()
     } else if(type == MsgPause) {
         state = Paused;
     }
+}
+
+MessageType Robot::waitForMessage(Message *msg)
+{
+    Message *m = NULL;
+    MessageType type;
+    while(network->waitForReadyRead(ROBOT_TIMEOUT)) {
+        type = network->receive(m);
+        if(type == MsgStart) {
+            state = Started;
+            delete m;
+        } else if (type == MsgPause) {
+            state = Paused;
+            delete m;
+        } else if (type == MsgStop) {
+            state = Stopped;
+            delete m;
+        } else {
+            msg = m;
+            return type;
+        }
+    }
+    // dead code needed to satisfy compiler
+    msg = NULL;
+    return MsgUndefined;
 }
 
 /* Limit line length to 100 characters; highlight 99th column

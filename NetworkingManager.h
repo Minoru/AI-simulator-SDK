@@ -16,6 +16,7 @@ public:
     void send(Message *);
     bool hasPendingMessages();
     MessageType receive(Message *);
+    bool waitForReadyRead(int);
 
 private:
     quint16 port;

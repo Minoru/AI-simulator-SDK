@@ -23,9 +23,10 @@ private:
     NetworkingManager *network;
     ModellingState state;
     void checkForStateChanges();
+    MessageType waitForMessage(Message *);
 
 public:
-    void move(int x, int y);
+    bool move(int x, int y);
     void turn(double degrees);
     void changeDiameter(unsigned int diameter);
     void changeColor(char red, char green, char blue);
