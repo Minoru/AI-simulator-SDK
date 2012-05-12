@@ -1,3 +1,6 @@
 *.o
-example/robot/example
-example/robot/Makefile
+Robot
+Environment
+Makefile
+moc_*.cpp
+moc_*.h
