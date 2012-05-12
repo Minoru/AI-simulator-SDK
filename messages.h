@@ -4,8 +4,7 @@
 #include <vector>
 
 enum MessageType {
-    MsgAcknowledge = 0,
-    MsgMove,
+    MsgMove = 0,
     MsgTurn,
     MsgChangeSize,
     MsgChangeColor,
@@ -13,6 +12,9 @@ enum MessageType {
     MsgBump,
     MsgThereYouSee,
     MsgParameterReport,
+    MsgStart,
+    MsgPause,
+    MsgStop,
     MsgUndefined
 };
 
@@ -58,7 +60,7 @@ public:
 class MessageChangeColor : public Message
 {
 public:
-    MessageChangeColor() { type = MsgChangeColor; };
+    MessageChangeColor() { type = MsgChangeColor; }
 
     char red, green, blue; 
 };
