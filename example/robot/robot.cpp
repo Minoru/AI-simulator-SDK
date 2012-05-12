@@ -64,7 +64,7 @@ void Robot::whoIsThere(unsigned int x, unsigned int y, unsigned int radius)
     m.coordX = x;
     m.coordY = y;
     m.radius = radius;
-    network->move(&m);
+    network->send(&m);
 
     // TODO: update robot's internal state
 

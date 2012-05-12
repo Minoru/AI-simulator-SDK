@@ -5,7 +5,7 @@
 #include <QUdpSocket>
 #include <QVariant>
 #include "../../NetworkingManager.h"
-#include "constants.h"
+#include "../../constants.h"
 
 class Robot
 {
@@ -24,6 +24,11 @@ private:
 
 public:
     void move(int x, int y);
+    void turn(double degrees);
+    void changeDiameter(unsigned int diameter);
+    void changeColor(char red, char green, char blue);
+    void whoIsThere(unsigned int x, unsigned int y, unsigned int radius);
+    void reportParameter(char id, int integral, unsigned int real);
 
 public:
     // getters

@@ -2,7 +2,7 @@
 #define MANAGER_H
 
 #include <QObject>
-#include "constants.h"
+#include "../../constants.h"
 #include "robot.h"
 
 class Manager : public QObject

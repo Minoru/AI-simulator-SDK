@@ -21,7 +21,7 @@ SOURCES += main.cpp \
 HEADERS += \
     manager.h \
     envobject.h \
-    constants.h \
+    ../../constants.h \
     ../../NetworkingManager.h \
     ../../messages.h \
     ../../messages-serializers.h

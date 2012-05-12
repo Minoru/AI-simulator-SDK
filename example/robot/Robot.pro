@@ -20,7 +20,7 @@ SOURCES += main.cpp \
 
 HEADERS += \
     robot.h \
-    constants.h \
+    ../../constants.h \
     manager.h \
     ../../NetworkingManager.h \
     ../../messages.h \
