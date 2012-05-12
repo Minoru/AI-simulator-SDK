@@ -21,12 +21,30 @@ Robot::Robot():
 /* Returns true if we bumped into something */
 bool Robot::move(int x, int y)
 {
+    // calculate new orientation
+    double angle = acos(fabs(y - coords.second)
+                        / sqrt(  pow(x - coords.first, 2)
+                               + pow(y - coords.second, 2)));
+    angle *= 180 / PI;
+
+    if (y > coords.second && x > coords.first)
+        angle = 180 - angle;
+    else if (y > coords.second && x <= coords.first)
+        angle = 180 + angle;
+    else if (y <= coords.second && x <= coords.first)
+        angle = 360 - angle;
+
+    MessageTurn mTurn;
+    mTurn.degrees = angle;
+    network->send(&mTurn);
+
     MessageMove m;
     m.coordX = x;
     m.coordY = y;
     network->send(&m);
 
     coords = std::pair<int, int>(x, y);
+    orientation = angle;
 
     Message *msg = NULL;
     MessageType type = waitForMessage(msg);

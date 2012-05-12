@@ -4,6 +4,7 @@
 #include <QColor>
 #include <QUdpSocket>
 #include <QVariant>
+#include <math.h>
 #include "../../NetworkingManager.h"
 #include "../../constants.h"
 
