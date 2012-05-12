@@ -2,7 +2,7 @@
 #define ENVOBJECT_H
 
 #include <QColor>
-#include "constants.h"
+#include "../../constants.h"
 #include "../../NetworkingManager.h"
 
 class EnvObject

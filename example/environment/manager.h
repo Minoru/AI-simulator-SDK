@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <vector>
-#include "constants.h"
+#include "../../constants.h"
 #include "envobject.h"
 
 class Manager : public QObject
