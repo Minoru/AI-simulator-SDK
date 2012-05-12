@@ -22,6 +22,7 @@ private:
     std::pair<std::string, double> *parameters; //custom robot parameters
     NetworkingManager *network;
     ModellingState state;
+    void checkForStateChanges();
 
 public:
     void move(int x, int y);
