@@ -2,6 +2,7 @@
 #include <QTimer>
 #include <QFile>
 #include <QTextStream>
+#include <time.h>
 #include <QDebug>
 #include <iostream>
 #include <math.h>

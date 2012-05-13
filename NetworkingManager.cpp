@@ -52,7 +52,7 @@ void NetworkingManager::send(Message *msg)
 
     if(datagram) {
         socket->writeDatagram(datagram->constData(), datagram->size(),
-                QHostAddress::LocalHost, SIMULATOR_PORT);
+                              QHostAddress::LocalHost, SIMULATOR_PORT);
     }
     
     delete datagram;
@@ -63,11 +63,14 @@ bool NetworkingManager::hasPendingMessages()
     return socket->hasPendingDatagrams();
 }
 
-MessageType NetworkingManager::receive(Message *msg)
+Message* NetworkingManager::receive()
 {
     if(! socket->hasPendingDatagrams()) {
-        msg = NULL;
-        return MsgUndefined;
+        Message* m = new Message();
+        m->num = 0;
+        m->port = port;
+        m->type = MsgUndefined;
+        return m;
     }
 
     
@@ -77,7 +80,7 @@ MessageType NetworkingManager::receive(Message *msg)
     QHostAddress sender;
     quint16 senderPort;
     socket->readDatagram(datagram.data(), datagram.size(),
-                    &sender, &senderPort);
+                         &sender, &senderPort);
 
     QDataStream stream(&datagram, QIODevice::ReadOnly);
 
@@ -86,8 +89,8 @@ MessageType NetworkingManager::receive(Message *msg)
     if(version != 2) {
         // FIXME: stick qDebug in here
         // VERSION MISMATCH, CAN'T HANDLE THAT
-        msg = NULL;
-        return MsgUndefined;
+
+        return NULL;
     }
 
     quint32 seq_num;
@@ -98,21 +101,23 @@ MessageType NetworkingManager::receive(Message *msg)
 
     switch(static_cast<MessageType>(msg_type)) {
     case MsgBump:
-        {
-        msg = new MessageBump();
-        MessageBump *m = static_cast<MessageBump *>(msg);
+    {
+        MessageBump *m = new MessageBump();
 
         quint32 x, y;
         stream >> x >> y;
         m->coordX = x;
         m->coordY = y;
-        };
+        m->num = seq_num;
+        m->port = port;
+        m->type = static_cast<MessageType>(msg_type);
+        return m;
+    };
         break;
 
     case MsgThereYouSee:
-        {
-        msg = new MessageThereYouSee();
-        MessageThereYouSee *m = static_cast<MessageThereYouSee *>(msg);
+    {
+        MessageThereYouSee *m = new MessageThereYouSee();;
 
         quint32 count;
         stream >> count;
@@ -134,14 +139,31 @@ MessageType NetworkingManager::receive(Message *msg)
 
             m->objects.push_back(obj);
         }
-        };
+
+        m->num = seq_num;
+        m->port = port;
+        m->type = static_cast<MessageType>(msg_type);
+        return m;
+    };
         break;
 
     case MsgStart:
+    {
+        Message* m = new Message();
+        m->num = seq_num;
+        m->port = port;
+        m->type = static_cast<MessageType>(msg_type);
+        return m;
+    };
+        break;
     case MsgPause:
-        {
-        msg = new Message();
-        };
+    {
+        Message* m = new Message();
+        m->num = seq_num;
+        m->port = port;
+        m->type = static_cast<MessageType>(msg_type);
+        return m;
+    };
         break;
 
     default:
@@ -150,11 +172,12 @@ MessageType NetworkingManager::receive(Message *msg)
         break;
     }
 
-    msg->num = seq_num;
-    msg->port = port;
-    msg->type = static_cast<MessageType>(msg_type);
+    Message* m = new Message();
+    m->num = seq_num;
+    m->port = port;
+    m->type = static_cast<MessageType>(msg_type);
 
-    return msg->type;
+    return m;
 }
 
 bool NetworkingManager::waitForReadyRead(int msecs)

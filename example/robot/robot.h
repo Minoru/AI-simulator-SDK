@@ -25,7 +25,7 @@ private:
     ModellingState state;
 
     void checkForStateChanges();
-    MessageType waitForMessage(Message *);
+    Message* waitForMessage();
 
 public:
     bool move(int x, int y);

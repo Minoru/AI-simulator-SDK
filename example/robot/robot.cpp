@@ -49,8 +49,8 @@ bool Robot::move(int x, int y)
     network->send(&m);
 
     Message *msg = NULL;
-    MessageType type = waitForMessage(msg);
-    if (type == MsgBump) {
+    msg = waitForMessage();
+    if (msg->type == MsgBump) {
         MessageBump *m = static_cast<MessageBump *>(msg);
         coords = std::pair<int, int>(m->coordX, m->coordY);
         return true;
@@ -106,8 +106,8 @@ std::vector<MessageObject> Robot::whoIsThere(unsigned int x, unsigned int y, uns
 
     Message *msg = NULL;
     std::vector<MessageObject> results;
-    MessageType type = waitForMessage(msg);
-    if (type == MsgThereYouSee) {
+    msg = waitForMessage();
+    if (msg->type == MsgThereYouSee) {
         MessageThereYouSee *m = static_cast<MessageThereYouSee *>(msg);
         results.resize(m->objects.size());
         std::vector<MessageObject>::iterator it;
@@ -142,38 +142,39 @@ bool Robot::isPause()
 void Robot::checkForStateChanges()
 {
     Message *msg = NULL;
-    MessageType type = network->receive(msg);
-    if(type == MsgStart) {
+    msg = network->receive();
+    if(msg->type == MsgStart) {
         state = Started;
-    } else if(type == MsgPause) {
+    } else if(msg->type == MsgPause) {
         state = Paused;
-    } else if(type == MsgBump) {
+    } else if(msg->type == MsgBump) {
         MessageBump *m = static_cast<MessageBump *>(msg);
         coords = std::pair<int, int>(m->coordX, m->coordY);
     }
-    delete msg;
+ //   delete msg;
 }
 
-MessageType Robot::waitForMessage(Message *msg)
+Message* Robot::waitForMessage()
 {
     Message *m = NULL;
-    MessageType type;
     while(network->waitForReadyRead(ROBOT_TIMEOUT)) {
-        type = network->receive(m);
-        if(type == MsgStart) {
+        m = network->receive();
+        if(m->type == MsgStart) {
             state = Started;
-            delete m;
-        } else if (type == MsgPause) {
+   //         delete m;
+        } else if (m->type == MsgPause) {
             state = Paused;
-            delete m;
+   //         delete m;
         } else {
-            msg = m;
-            return type;
+            return m;
         }
     }
     // dead code needed to satisfy compiler
-    msg = NULL;
-    return MsgUndefined;
+    m = new Message();
+ /*   m->port = 0;
+    m->num = 0;
+    m->type = MsgUndefined;*/
+    return m;
 }
 
 /* Limit line length to 100 characters; highlight 99th column

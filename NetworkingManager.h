@@ -16,7 +16,7 @@ public:
 
     void send(Message *);
     bool hasPendingMessages();
-    MessageType receive(Message *);
+    Message* receive();
     bool waitForReadyRead(int);
 
 private:
