@@ -125,6 +125,8 @@ void Manager::loadConfiguration(QString configurationFile)
             y = rand() % (mapSize.second * REAL_PIXEL_SIZE);
             std::cout << "Object " << obj <<
                          " receives random coordinates ( " << x << ", " << y << " )";
+
+            //TODO: send generated coordiantes to simulator
         }
 
         // Check if size is a number and is over than zero
