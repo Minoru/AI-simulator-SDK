@@ -34,9 +34,12 @@ bool Robot::move(int x, int y)
     else if (y <= coords.second && x <= coords.first)
         angle = 360 - angle;
 
-    MessageTurn mTurn;
-    mTurn.degrees = angle;
-    network->send(&mTurn);
+    if(orientation != angle) {
+        MessageTurn mTurn;
+        mTurn.degrees = angle;
+        network->send(&mTurn);
+        orientation = angle;
+    }
 
     MessageMove m;
     m.coordX = x;
@@ -44,7 +47,6 @@ bool Robot::move(int x, int y)
     network->send(&m);
 
     coords = std::pair<int, int>(x, y);
-    orientation = angle;
 
     Message *msg = NULL;
     MessageType type = waitForMessage(msg);
