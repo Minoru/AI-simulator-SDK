@@ -80,6 +80,12 @@ public:
             return 0;
     }
 
+    ModellingState getState()
+    {
+        checkForStateChanges();
+        return state;
+    }
+
     // setters
 
     void setPortNumber(unsigned int port)

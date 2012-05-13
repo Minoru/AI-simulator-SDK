@@ -4,6 +4,7 @@
 #include <QtCore/QtGlobal>
 #include <QtNetwork/QUdpSocket>
 
+#include "constants.h"
 #include "messages.h"
 #include "messages-serializers.h"
 

@@ -46,8 +46,6 @@ bool Robot::move(int x, int y)
     m.coordY = y;
     network->send(&m);
 
-    coords = std::pair<int, int>(x, y);
-
     Message *msg = NULL;
     MessageType type = waitForMessage(msg);
     if (type == MsgBump) {
@@ -55,6 +53,7 @@ bool Robot::move(int x, int y)
         coords = std::pair<int, int>(m->coordX, m->coordY);
         return true;
     } else {
+        coords = std::pair<int, int>(x, y);
         return false;
     }
 }
@@ -138,7 +137,11 @@ void Robot::checkForStateChanges()
         state = Started;
     } else if(type == MsgPause) {
         state = Paused;
+    } else if(type == MsgBump) {
+        MessageBump *m = static_cast<MessageBump *>(msg);
+        coords = std::pair<int, int>(m->coordX, m->coordY);
     }
+    delete msg;
 }
 
 MessageType Robot::waitForMessage(Message *msg)

@@ -10,7 +10,8 @@
 #define REAL_PIXEL_SIZE             60      //number of cells in real pixel
 #define ENV_OBJECTS                 255     //number of environment objects
 #define CUSTOM_PARAMETERS_QUANTITY  16      //number of custom robot params
-#define ROBOT_TIMEOUT               5000        // after this time being idle robot windows
+#define ROBOT_TIMEOUT               50        // after this time being idle robot windows
+#define SIMULATOR_PORT              9000    // port the simulator is listening to
 
 enum Intersection { Allowed, Denied, AllowedForSameColor };
 enum ModellingState {Started, Paused, Stopped};

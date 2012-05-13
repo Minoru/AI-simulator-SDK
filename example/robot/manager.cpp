@@ -33,6 +33,9 @@ void Manager::action()
 {
     //TODO: replace the code below by yours
 
+    if(robot->getState() != Started)
+          return;
+
     srand(static_cast<unsigned>(time(0)));
 
     if (fabs(robot->getCoords().first - robot->getParameter(0)) <

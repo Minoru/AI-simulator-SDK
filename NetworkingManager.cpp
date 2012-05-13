@@ -3,6 +3,7 @@
 NetworkingManager::NetworkingManager(quint16 port)
 {
     socket = new QUdpSocket();
+    socket->bind(QHostAddress::LocalHost, port);
     this->port = port;
 }
 
@@ -42,6 +43,7 @@ void NetworkingManager::send(Message *msg)
     case MsgParameterReport:
         datagram = serializeMessageParameterReport(static_cast<MessageParameterReport *>(msg));
         break;
+
     default:
         // FIXME: stick qDebug in here
         // That message type is unhandled
@@ -50,7 +52,7 @@ void NetworkingManager::send(Message *msg)
 
     if(datagram) {
         socket->writeDatagram(datagram->constData(), datagram->size(),
-                QHostAddress::LocalHost, 9000);
+                QHostAddress::LocalHost, SIMULATOR_PORT);
     }
     
     delete datagram;
@@ -131,6 +133,13 @@ MessageType NetworkingManager::receive(Message *msg)
 
             m->objects.push_back(obj);
         }
+        };
+        break;
+
+    case MsgStart:
+    case MsgPause:
+        {
+        msg = new Message();
         };
         break;
 
