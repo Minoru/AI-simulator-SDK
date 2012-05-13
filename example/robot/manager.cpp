@@ -169,12 +169,7 @@ void Manager::loadConfiguration(QString configurationFile)
         robot->setParameter(i, parameters[i].second);
     }
 
-    //robot->setCoords(x, y);
-    //robot->setSize(size);
-    //robot->setOrientation(orientation);
-    //robot->setColor(color);
     robot->setIntersection(static_cast<Intersection>(intersection.toInt()));
-    //robot->setParameters(parameters);
 
     configurationLoaded = true;
 }
