@@ -36,6 +36,7 @@ bool Robot::move(int x, int y)
 
     if(orientation != angle) {
         MessageTurn mTurn;
+        mTurn.envObjID = 0;
         mTurn.degrees = angle;
         network->send(&mTurn);
         orientation = angle;
@@ -54,6 +55,9 @@ bool Robot::move(int x, int y)
         coords = std::pair<int, int>(m->coordX, m->coordY);
         return true;
     } else {
+
+        //FIXME: why we return false if move is successful?
+
         coords = std::pair<int, int>(x, y);
         return false;
     }
