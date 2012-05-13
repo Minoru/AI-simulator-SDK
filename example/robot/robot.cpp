@@ -42,6 +42,7 @@ bool Robot::move(int x, int y)
     }
 
     MessageMove m;
+    m.envObjID = 0;
     m.coordX = x;
     m.coordY = y;
     network->send(&m);
@@ -61,6 +62,7 @@ bool Robot::move(int x, int y)
 void Robot::turn(double degrees)
 {
     MessageTurn m;
+    m.envObjID = 0;
     m.degrees = degrees;
     network->send(&m);
 
@@ -70,6 +72,7 @@ void Robot::turn(double degrees)
 void Robot::changeDiameter(unsigned int diameter)
 {
     MessageChangeSize m;
+    m.envObjID = 0;
     m.diameter = diameter;
     network->send(&m);
 
@@ -79,6 +82,7 @@ void Robot::changeDiameter(unsigned int diameter)
 void Robot::changeColor(int red, int green, int blue)
 {
     MessageChangeColor m;
+    m.envObjID = 0;
     m.red = static_cast<char>(red);
     m.green = static_cast<char>(green);
     m.blue = static_cast<char>(blue);
@@ -90,6 +94,7 @@ void Robot::changeColor(int red, int green, int blue)
 std::vector<MessageObject> Robot::whoIsThere(unsigned int x, unsigned int y, unsigned int radius)
 {
     MessageWhoIsThere m;
+    m.envObjID = 0;
     m.coordX = x;
     m.coordY = y;
     m.radius = radius;
@@ -111,6 +116,7 @@ std::vector<MessageObject> Robot::whoIsThere(unsigned int x, unsigned int y, uns
 void Robot::reportParameter(char id, int integral, unsigned int real)
 {
     MessageParameterReport m;
+    m.envObjID = 0;
     m.id = id;
     m.integral = integral;
     m.real = real;

@@ -83,7 +83,7 @@ MessageType NetworkingManager::receive(Message *msg)
 
     quint8 version;
     stream >> version;
-    if(version != 1) {
+    if(version != 2) {
         // FIXME: stick qDebug in here
         // VERSION MISMATCH, CAN'T HANDLE THAT
         msg = NULL;
@@ -91,9 +91,10 @@ MessageType NetworkingManager::receive(Message *msg)
     }
 
     quint32 seq_num;
+    quint8 envObjID;
     quint16 port;
     quint8 msg_type;
-    stream >> seq_num >> port >> msg_type;
+    stream >> seq_num >> envObjID >> port >> msg_type;
 
     switch(static_cast<MessageType>(msg_type)) {
     case MsgBump:

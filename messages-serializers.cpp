@@ -2,10 +2,12 @@
 
 void setupHeader(Message *msg, QDataStream &stream)
 {
-    // version: 1
-    stream << static_cast<quint8>(1);
+    // version: 2
+    stream << static_cast<quint8>(2);
     // other header infortmation
-    stream << static_cast<quint32>(msg->num) << static_cast<quint16>(msg->port)
+    stream << static_cast<quint32>(msg->num)
+           << static_cast<quint8>(msg->envObjID)
+           << static_cast<quint16>(msg->port)
            << static_cast<quint8>(msg->type);
 }
 
