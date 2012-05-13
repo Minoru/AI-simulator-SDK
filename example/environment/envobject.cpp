@@ -1,6 +1,7 @@
 #include "envobject.h"
 
 unsigned int EnvObject::portNumber = 0;
+NetworkingManager * EnvObject::network = NULL;
 
 EnvObject::EnvObject():
     velocity(0),

@@ -22,7 +22,8 @@ private:
     bool movable;                       //is object movable
     std::pair<int, int> coords;         //object's coordinates, first - x, second - y;
 
-    //TODO: put it and NetworkingManager object like in robot application
+    static NetworkingManager *network;
+    ModellingState state;
 
 public:
     void move(int x, int y);
@@ -121,9 +122,14 @@ public:
 
     static void setPortNumber(unsigned int port)
     {
-        portNumber = port;
-    }
+        if (portNumber == 0) {
+            portNumber = port;
 
+            if (network != NULL)
+                delete network;
+            network = new NetworkingManager(port);
+        }
+    }
 };
 
 #endif // ENVOBJECT_H
