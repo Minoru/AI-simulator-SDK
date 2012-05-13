@@ -7,9 +7,11 @@
 #include <math.h>
 #include "manager.h"
 
-Manager::Manager(QObject *parent, QString configurationFile) :
+Manager::Manager(QObject *parent, QString configurationFile,
+                 std::pair<unsigned int, unsigned int> mapSize) :
     QObject(parent)
 {
+    this->mapSize = mapSize;
     configurationLoaded = false;
     loadConfiguration(configurationFile);
 }
@@ -111,18 +113,18 @@ void Manager::loadConfiguration(QString configurationFile)
                 std::cout << "Invalid start position (object " << obj << " )";
                 return;
             }
-            if (x < 0 || y < 0) {
+            if (x < 0 || y < 0 || x >= mapSize.first * REAL_PIXEL_SIZE
+                    || y >= mapSize.second * REAL_PIXEL_SIZE) {
                 std::cout << "Start position is out of the map (object " << obj << " )";
                 return;
             }
         } else {
-            //FIXME: remove this part of code when receiving "start" message will be implemented
 
-//            srand(static_cast<unsigned int>(time(0)));
-//            x = rand() % (mapSize * REAL_PIXEL_SIZE);
-//            y = rand() % (mapSize * REAL_PIXEL_SIZE);
-//            std::cout << "Object " << obj <<
-//                         " receives random coordinates ( " << x << ", " << y << " )";
+            srand(static_cast<unsigned int>(time(0)));
+            x = rand() % (mapSize.first * REAL_PIXEL_SIZE);
+            y = rand() % (mapSize.second * REAL_PIXEL_SIZE);
+            std::cout << "Object " << obj <<
+                         " receives random coordinates ( " << x << ", " << y << " )";
         }
 
         // Check if size is a number and is over than zero

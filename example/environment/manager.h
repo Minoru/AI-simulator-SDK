@@ -10,7 +10,9 @@ class Manager : public QObject
 {
     Q_OBJECT
 public:
-    explicit Manager(QObject *parent = 0, QString configurationFile = "");
+    explicit Manager(QObject *parent = 0, QString configurationFile = "",
+                     std::pair<unsigned int, unsigned int> mapSize
+                     = std::pair<unsigned int, unsigned int>());
 
 signals:
     void stop();
@@ -21,6 +23,7 @@ private:
     void loadConfiguration(QString configurationFile);
 
     std::vector<EnvObject *> envObjects;
+    std::pair<unsigned int, unsigned int> mapSize;
     bool configurationLoaded;
 };
 

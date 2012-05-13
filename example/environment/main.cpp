@@ -13,7 +13,16 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    Manager *manager = new Manager(&a, QString(argv[1]));
+    bool ok = true;
+    std::pair<unsigned int, unsigned int> mapSize = std::pair<unsigned int, unsigned int>();
+    mapSize.first = QString(argv[2]).toInt(&ok);
+    mapSize.second = QString(argv[3]).toInt(&ok);
+    if (!ok || mapSize.first == 0 || mapSize.second == 0) {
+        std::cout << "Error! Invalid map size.\n";
+        return 0;
+    }
+
+    Manager *manager = new Manager(&a, QString(argv[1]), mapSize);
     QObject::connect(manager, SIGNAL(stop()), &a, SLOT(quit()));
     QTimer::singleShot(0, manager, SLOT(run()));
 
