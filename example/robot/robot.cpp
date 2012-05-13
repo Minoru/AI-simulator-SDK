@@ -130,12 +130,6 @@ bool Robot::isPause()
     return (state == Paused);
 }
 
-bool Robot::isStop()
-{
-    checkForStateChanges();
-    return (state == Stopped);
-}
-
 void Robot::checkForStateChanges()
 {
     Message *msg = NULL;

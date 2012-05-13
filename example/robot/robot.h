@@ -38,7 +38,6 @@ private:
 public:
     bool isStart();
     bool isPause();
-    bool isStop();
 
 public:
     // getters
