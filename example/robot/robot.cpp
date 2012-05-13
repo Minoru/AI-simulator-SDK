@@ -142,8 +142,6 @@ void Robot::checkForStateChanges()
     MessageType type = network->receive(msg);
     if(type == MsgStart) {
         state = Started;
-    } else if(type == MsgStop) {
-        state = Stopped;
     } else if(type == MsgPause) {
         state = Paused;
     }
@@ -160,9 +158,6 @@ MessageType Robot::waitForMessage(Message *msg)
             delete m;
         } else if (type == MsgPause) {
             state = Paused;
-            delete m;
-        } else if (type == MsgStop) {
-            state = Stopped;
             delete m;
         } else {
             msg = m;
