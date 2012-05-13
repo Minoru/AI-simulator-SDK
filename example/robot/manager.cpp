@@ -35,19 +35,19 @@ void Manager::action()
 
     srand(static_cast<unsigned>(time(0)));
 
-    if (fabs(robot->getCoords().first - robot->getParameter(0).second) <
-            robot->getParameter(2).second
-            && fabs(robot->getCoords().second - robot->getParameter(1).second) <
-            robot->getParameter(2).second) {
+    if (fabs(robot->getCoords().first - robot->getParameter(0)) <
+            robot->getParameter(2)
+            && fabs(robot->getCoords().second - robot->getParameter(1)) <
+            robot->getParameter(2)) {
         robot->setParameter(0, 300 + rand() % 23400);
         robot->setParameter(1, 300 + rand() % 23400);
     } else {
         double x1 = robot->getCoords().first;
         double y1 = robot->getCoords().second;
-        double x2 = robot->getParameter(0).second;
-        double y2 = robot->getParameter(1).second;
+        double x2 = robot->getParameter(0);
+        double y2 = robot->getParameter(1);
         double y;
-        double part = fabs(robot->getParameter(2).second) / sqrt(pow((x2 - x1) / (y2 - y1), 2) + 1);
+        double part = fabs(robot->getParameter(2)) / sqrt(pow((x2 - x1) / (y2 - y1), 2) + 1);
         if (part + y1 < y2)
             y = part + y1;
         else
@@ -159,13 +159,22 @@ void Manager::loadConfiguration(QString configurationFile)
         parameters[i] = std::pair<std::string, double>(name, value);
     }
 
-    robot->setCoords(x, y);
-    robot->setSize(size);
     robot->setPortNumber(portFilename);
-    robot->setOrientation(orientation);
-    robot->setColor(color);
+    robot->move(x, y);
+    robot->turn(orientation);
+    robot->changeDiameter(size);
+    robot->changeColor(color.red(), color.green(), color.blue());
+
+    for (int i = 0; i < CUSTOM_PARAMETERS_QUANTITY; i++) {
+        robot->setParameter(i, parameters[i].second);
+    }
+
+    //robot->setCoords(x, y);
+    //robot->setSize(size);
+    //robot->setOrientation(orientation);
+    //robot->setColor(color);
     robot->setIntersection(static_cast<Intersection>(intersection.toInt()));
-    robot->setParameters(parameters);
+    //robot->setParameters(parameters);
 
     configurationLoaded = true;
 }

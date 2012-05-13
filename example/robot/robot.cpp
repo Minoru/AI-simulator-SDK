@@ -77,15 +77,15 @@ void Robot::changeDiameter(unsigned int diameter)
     size = diameter;
 }
 
-void Robot::changeColor(char red, char green, char blue)
+void Robot::changeColor(int red, int green, int blue)
 {
     MessageChangeColor m;
-    m.red = red;
-    m.green = green;
-    m.blue = blue;
+    m.red = static_cast<char>(red);
+    m.green = static_cast<char>(green);
+    m.blue = static_cast<char>(blue);
     network->send(&m);
 
-    color = QColor(static_cast<int>(red), static_cast<int>(green), static_cast<int>(blue));
+    color = QColor(red, green, blue);
 }
 
 std::vector<MessageObject> Robot::whoIsThere(unsigned int x, unsigned int y, unsigned int radius)

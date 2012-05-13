@@ -31,7 +31,7 @@ public:
     bool move(int x, int y);
     void turn(double degrees);
     void changeDiameter(unsigned int diameter);
-    void changeColor(char red, char green, char blue);  
+    void changeColor(int red, int green, int blue);
     std::vector<MessageObject> whoIsThere(unsigned int x, unsigned int y, unsigned int radius);
 private:
     void reportParameter(char id, int integral, unsigned int real);
@@ -73,68 +73,30 @@ public:
         return coords;
     }
 
-    std::pair<std::string, double> * getParameters()
-    {
-        return parameters;
-    }
-
-    std::pair<std::string, double> getParameter(unsigned int parameter)
+    double getParameter(unsigned int parameter)
     {
         if (parameter < CUSTOM_PARAMETERS_QUANTITY)
-            return parameters[parameter];
+            return parameters[parameter].second;
         else
-            return std::pair<std::string, double>();
-    }
-
-    NetworkingManager * getNetwork()
-    {
-        return network;
+            return 0;
     }
 
     // setters
 
-    void setSize(int size)
-    {
-        this->size = size;
-    }
-
-    void setOrientation(double orientation)
-    {
-        if (orientation >= 360 || orientation < 0)
-            this->orientation = 0;
-        else
-            this->orientation = orientation;
-    }
-
-    void setColor(QColor color)
-    {
-        this->color = color;
-    }
-
-    void setCoords(int x, int y)
-    {
-        coords = std::pair<int, int>(x, y);
-    }
-
     void setPortNumber(unsigned int port)
     {
-        portNumber = port;
+        if (portNumber == 0) {
+            portNumber = port;
 
-        if (network != NULL)
-           delete network;
-        network = new NetworkingManager(port);
+            if (network != NULL)
+                delete network;
+            network = new NetworkingManager(port);
+        }
     }
 
     void setIntersection(Intersection intersection)
     {
         this->intersection = intersection;
-    }
-
-    void setParameters(std::pair<std::string, double> *params)
-    {
-        for (int i = 0; i < CUSTOM_PARAMETERS_QUANTITY; i++) {
-            parameters[i] = params[i];
-        }
     }
 
     void setParameter(unsigned int parameter, double value)
