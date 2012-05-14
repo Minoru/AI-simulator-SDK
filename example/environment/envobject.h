@@ -2,6 +2,7 @@
 #define ENVOBJECT_H
 
 #include <QColor>
+#include "math.h"
 #include "../../constants.h"
 #include "../../NetworkingManager.h"
 
