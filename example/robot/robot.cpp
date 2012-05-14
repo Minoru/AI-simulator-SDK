@@ -139,8 +139,7 @@ bool Robot::isPause()
 
 void Robot::checkForStateChanges()
 {
-    Message *msg = NULL;
-    msg = network->receive();
+    Message *msg = network->receive();
     if(msg && msg->type == MsgStart) {
         state = Started;
     } else if(msg && msg->type == MsgPause) {
@@ -167,7 +166,7 @@ Message* Robot::waitForMessage()
             return m;
         }
     }
-    return m;
+    return NULL;
 }
 
 /* Limit line length to 100 characters; highlight 99th column
