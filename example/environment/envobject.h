@@ -9,7 +9,7 @@
 class EnvObject
 {
 public:
-    EnvObject();
+    EnvObject(unsigned int id, bool isMovable, Intersection intersectionType, unsigned int speed);
 
 private:
     unsigned int objectId;              //as one controller controls all envObjects,
@@ -96,6 +96,7 @@ public:
 
     // Setters
 
+    /*
     void setSize(int size)
     {
         this->size = size;
@@ -138,6 +139,7 @@ public:
     {
         this->velocity = velocity;
     }
+    */
 
     static void setPortNumber(unsigned int port)
     {

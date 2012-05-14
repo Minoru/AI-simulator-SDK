@@ -4,13 +4,15 @@ unsigned int EnvObject::portNumber = 0;
 NetworkingManager * EnvObject::network = NULL;
 ModellingState EnvObject::state = Started;
 
-EnvObject::EnvObject():
-    velocity(0),
+EnvObject::EnvObject(unsigned int id, bool isMovable,
+                     Intersection intersectionType, unsigned int speed):
+    objectId(id),
+    velocity(speed),
     color(255, 255, 255),
     size(0),
     orientation(0),
-    intersection(AllowedForSameColor),
-    movable(false),
+    intersection(intersectionType),
+    movable(isMovable),
     coords(0, 0)
 {
 }
@@ -66,7 +68,7 @@ bool EnvObject::move(int x, int y)
 void EnvObject::turn(double degrees)
 {
     MessageTurn m;
-    m.envObjID = objectId;
+    m.envObjID = objectId + 1;
     m.degrees = degrees;
     network->send(&m);
 
@@ -76,7 +78,7 @@ void EnvObject::turn(double degrees)
 void EnvObject::changeDiameter(unsigned int diameter)
 {
     MessageChangeSize m;
-    m.envObjID = objectId;
+    m.envObjID = objectId + 1;
     m.diameter = diameter;
     network->send(&m);
 
@@ -86,7 +88,7 @@ void EnvObject::changeDiameter(unsigned int diameter)
 void EnvObject::changeColor(int red, int green, int blue)
 {
     MessageChangeColor m;
-    m.envObjID = objectId;
+    m.envObjID = objectId + 1;
     m.red = static_cast<char>(red);
     m.green = static_cast<char>(green);
     m.blue = static_cast<char>(blue);

@@ -75,7 +75,6 @@ void Manager::loadConfiguration(QString configurationFile)
     const int parametersQuantityPerObject = 8;      // See AI-simulator wiki
     QVector<int> indexes = QVector<int>();
     for (int obj = 0; obj < ENV_OBJECTS; obj++) {
-        EnvObject *envObject = new EnvObject();
 
         if (configStringList.size() < 2 + (obj+1) * parametersQuantityPerObject)
             break;
@@ -175,14 +174,13 @@ void Manager::loadConfiguration(QString configurationFile)
         }
 
         indexes.push_back(index);
-        envObject->setObjectId(index);
-        envObject->setCoords(x, y);
-        envObject->setSize(size);
-        envObject->setIntersection(static_cast<Intersection>(intersection.toInt()));
-        envObject->setMovable(movable);
-        envObject->setOrientation(orientation);
-        envObject->setVelocity(velocity);
-        envObject->setColor(color);
+        EnvObject *envObject = new EnvObject(index, movable,
+                                             static_cast<Intersection>(intersection.toInt()),
+                                             velocity);
+        envObject->move(x, y);
+        envObject->changeDiameter(size);
+        envObject->turn(orientation);
+        envObject->changeColor(color.red(), color.green(), color.blue());
         envObjects.push_back(envObject);
     }
 
@@ -203,7 +201,7 @@ void Manager::checkForStateChanges()
         unsigned int object = m->envObjID;
         for (unsigned int i = 0; i < envObjects.size(); i++) {
             if (envObjects.at(i) != NULL && envObjects.at(i)->getObjectId() + 1 == object) {
-                envObjects.at(i)->setCoords(m->coordX, m->coordY);
+                envObjects.at(i)->move(m->coordX, m->coordY);
             }
         }
     }
