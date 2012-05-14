@@ -146,6 +146,7 @@ Message* NetworkingManager::receive()
         msg = new Message();
     }
     msg->num = seq_num;
+    msg->envObjID = envObjID;
     msg->port = port;
     msg->type = static_cast<MessageType>(msg_type);
 
