@@ -14,6 +14,11 @@ public:
                      std::pair<unsigned int, unsigned int> mapSize
                      = std::pair<unsigned int, unsigned int>());
 
+    std::vector<EnvObject *> getEnvObjects()
+    {
+        return envObjects;
+    }
+
 signals:
     void stop();
 public slots:
@@ -21,6 +26,7 @@ public slots:
 private:
     void action();
     void loadConfiguration(QString configurationFile);
+    void checkForStateChanges();
 
     std::vector<EnvObject *> envObjects;
     std::pair<unsigned int, unsigned int> mapSize;

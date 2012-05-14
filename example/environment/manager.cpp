@@ -19,8 +19,9 @@ Manager::Manager(QObject *parent, QString configurationFile,
 void Manager::run()
 {
     if (configurationLoaded) {
-        //TODO: at this point we must process incoming messages from the simulator
-        action();
+
+        if (EnvObject::getState() == Started)
+            action();
         QTimer::singleShot(PERFORM_ACTION_FREQUENCY, this, SLOT(run()));
     } else {
         std::cout << "Environment configuration is not loaded. " <<
@@ -186,6 +187,27 @@ void Manager::loadConfiguration(QString configurationFile)
     }
 
     configurationLoaded = true;
+}
+
+void Manager::checkForStateChanges()
+{
+    Message *msg = NULL;
+    msg = EnvObject::getNetwork()->receive();
+    if (msg && msg->type == MsgStart) {
+        EnvObject::setState(Started);
+    } else if (msg && msg->type == MsgPause) {
+        EnvObject::setState(Paused);
+    } else if (msg && msg->type == MsgBump) {
+
+        MessageBump *m = static_cast<MessageBump *>(msg);
+        unsigned int object = m->envObjID;
+        for (unsigned int i = 0; i < envObjects.size(); i++) {
+            if (envObjects.at(i) != NULL && envObjects.at(i)->getObjectId() + 1 == object) {
+                envObjects.at(i)->setCoords(m->coordX, m->coordY);
+            }
+        }
+    }
+    if (msg) delete msg;
 }
 
 /* Limit line length to 100 characters; highlight 99th column

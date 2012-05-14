@@ -24,10 +24,18 @@ private:
     std::pair<int, int> coords;         //object's coordinates, first - x, second - y;
 
     static NetworkingManager *network;
-    ModellingState state;
+    static ModellingState state;
 
 public:
-    void move(int x, int y);
+    bool move(int x, int y);
+    void turn(double degrees);
+    void changeDiameter(unsigned int diameter);
+    void changeColor(int red, int green, int blue);
+
+private:
+
+    //static void checkForStateChanges();
+    Message* waitForMessage();
 
 public:
 
@@ -74,6 +82,16 @@ public:
     std::pair<int, int> getCoords()
     {
         return coords;
+    }
+
+    static NetworkingManager * getNetwork()
+    {
+        return network;
+    }
+
+    static ModellingState getState()
+    {
+        return state;
     }
 
     // Setters
@@ -130,6 +148,11 @@ public:
                 delete network;
             network = new NetworkingManager(port);
         }
+    }
+
+    static void setState(ModellingState mState)
+    {
+        state = mState;
     }
 };
 
