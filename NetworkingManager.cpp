@@ -66,13 +66,8 @@ bool NetworkingManager::hasPendingMessages()
 Message* NetworkingManager::receive()
 {
     if(! socket->hasPendingDatagrams()) {
-        Message* m = new Message();
-        m->num = 0;
-        m->port = port;
-        m->type = MsgUndefined;
-        return m;
+        return NULL;
     }
-
     
     QByteArray datagram;
     datagram.resize(socket->pendingDatagramSize());
@@ -93,6 +88,7 @@ Message* NetworkingManager::receive()
         return NULL;
     }
 
+    Message *msg = NULL;
     quint32 seq_num;
     quint8 envObjID;
     quint16 port;
@@ -101,23 +97,21 @@ Message* NetworkingManager::receive()
 
     switch(static_cast<MessageType>(msg_type)) {
     case MsgBump:
-    {
-        MessageBump *m = new MessageBump();
+        {
+        msg = new MessageBump();
+        MessageBump *m = static_cast<MessageBump *>(msg);
 
         quint32 x, y;
         stream >> x >> y;
         m->coordX = x;
         m->coordY = y;
-        m->num = seq_num;
-        m->port = port;
-        m->type = static_cast<MessageType>(msg_type);
-        return m;
-    };
+        };
         break;
 
     case MsgThereYouSee:
-    {
-        MessageThereYouSee *m = new MessageThereYouSee();;
+        {
+        msg = new MessageThereYouSee();;
+        MessageThereYouSee *m = static_cast<MessageThereYouSee *>(msg);
 
         quint32 count;
         stream >> count;
@@ -139,31 +133,7 @@ Message* NetworkingManager::receive()
 
             m->objects.push_back(obj);
         }
-
-        m->num = seq_num;
-        m->port = port;
-        m->type = static_cast<MessageType>(msg_type);
-        return m;
-    };
-        break;
-
-    case MsgStart:
-    {
-        Message* m = new Message();
-        m->num = seq_num;
-        m->port = port;
-        m->type = static_cast<MessageType>(msg_type);
-        return m;
-    };
-        break;
-    case MsgPause:
-    {
-        Message* m = new Message();
-        m->num = seq_num;
-        m->port = port;
-        m->type = static_cast<MessageType>(msg_type);
-        return m;
-    };
+        };
         break;
 
     default:
@@ -172,12 +142,14 @@ Message* NetworkingManager::receive()
         break;
     }
 
-    Message* m = new Message();
-    m->num = seq_num;
-    m->port = port;
-    m->type = static_cast<MessageType>(msg_type);
+    if(msg == NULL) {
+        msg = new Message();
+    }
+    msg->num = seq_num;
+    msg->port = port;
+    msg->type = static_cast<MessageType>(msg_type);
 
-    return m;
+    return msg;
 }
 
 bool NetworkingManager::waitForReadyRead(int msecs)

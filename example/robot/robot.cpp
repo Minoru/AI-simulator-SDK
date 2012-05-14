@@ -50,14 +50,12 @@ bool Robot::move(int x, int y)
 
     Message *msg = NULL;
     msg = waitForMessage();
-    if (msg->type == MsgBump) {
+    if (msg && msg->type == MsgBump) {
         MessageBump *m = static_cast<MessageBump *>(msg);
         coords = std::pair<int, int>(m->coordX, m->coordY);
         return true;
     } else {
-
-        //FIXME: why we return false if move is successful?
-
+        if(msg) delete msg;
         coords = std::pair<int, int>(x, y);
         return false;
     }
@@ -107,7 +105,7 @@ std::vector<MessageObject> Robot::whoIsThere(unsigned int x, unsigned int y, uns
     Message *msg = NULL;
     std::vector<MessageObject> results;
     msg = waitForMessage();
-    if (msg->type == MsgThereYouSee) {
+    if (msg && msg->type == MsgThereYouSee) {
         MessageThereYouSee *m = static_cast<MessageThereYouSee *>(msg);
         results.resize(m->objects.size());
         std::vector<MessageObject>::iterator it;
@@ -143,15 +141,15 @@ void Robot::checkForStateChanges()
 {
     Message *msg = NULL;
     msg = network->receive();
-    if(msg->type == MsgStart) {
+    if(msg && msg->type == MsgStart) {
         state = Started;
-    } else if(msg->type == MsgPause) {
+    } else if(msg && msg->type == MsgPause) {
         state = Paused;
-    } else if(msg->type == MsgBump) {
+    } else if(msg && msg->type == MsgBump) {
         MessageBump *m = static_cast<MessageBump *>(msg);
         coords = std::pair<int, int>(m->coordX, m->coordY);
     }
- //   delete msg;
+    if(msg) delete msg;
 }
 
 Message* Robot::waitForMessage()
@@ -159,21 +157,16 @@ Message* Robot::waitForMessage()
     Message *m = NULL;
     while(network->waitForReadyRead(ROBOT_TIMEOUT)) {
         m = network->receive();
-        if(m->type == MsgStart) {
+        if(m && m->type == MsgStart) {
             state = Started;
-   //         delete m;
-        } else if (m->type == MsgPause) {
+            delete m;
+        } else if (m && m->type == MsgPause) {
             state = Paused;
-   //         delete m;
+            delete m;
         } else {
             return m;
         }
     }
-    // dead code needed to satisfy compiler
-    m = new Message();
- /*   m->port = 0;
-    m->num = 0;
-    m->type = MsgUndefined;*/
     return m;
 }
 
