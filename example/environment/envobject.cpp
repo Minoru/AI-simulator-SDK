@@ -5,16 +5,26 @@ NetworkingManager * EnvObject::network = NULL;
 ModellingState EnvObject::state = Started;
 
 EnvObject::EnvObject(unsigned int id, bool isMovable,
-                     Intersection intersectionType, unsigned int speed):
+                     Intersection intersectionType, unsigned int speed,
+                     std::pair<int, int> coordinates):
     objectId(id),
     velocity(speed),
     color(255, 255, 255),
     size(0),
     orientation(0),
     intersection(intersectionType),
-    movable(isMovable),
-    coords(0, 0)
+    movable(isMovable)
 {
+    if (!movable) {
+        coords = coordinates;
+        MessageMove m;
+        m.envObjID = objectId + 1;
+        m.coordX = coordinates.first;
+        m.coordY = coordinates.second;
+        network->send(&m);
+    } else {
+        move(coordinates.first, coordinates.second);
+    }
 }
 
 bool EnvObject::move(int x, int y)
@@ -51,17 +61,16 @@ bool EnvObject::move(int x, int y)
 
     Message *msg = NULL;
     msg = waitForMessage();
-
     if (msg && msg->type == MsgBump && msg->envObjID == objectId + 1) {
         MessageBump *m = static_cast<MessageBump *>(msg);
         coords = std::pair<int, int>(m->coordX, m->coordY);
-        return true;
+        return false;
 
     //TODO: apply bump message to corresponding envObject when msg->envObjID != objectId + 1
     } else {
-        if(msg) delete msg;
+        delete msg;
         coords = std::pair<int, int>(x, y);
-        return false;
+        return true;
     }
 }
 
@@ -112,7 +121,12 @@ Message* EnvObject::waitForMessage()
             return m;
         }
     }
-    return m;
+    return NULL;
+}
+
+void EnvObject::receiveBump(MessageBump *message)
+{
+    coords = std::pair<unsigned int, unsigned int>(message->coordX, message->coordY);
 }
 
 /* Limit line length to 100 characters; highlight 99th column

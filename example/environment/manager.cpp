@@ -11,7 +11,8 @@ Manager::Manager(QObject *parent, QString configurationFile,
                  std::pair<unsigned int, unsigned int> mapSize) :
     QObject(parent)
 {
-    this->mapSize = mapSize;
+    this->mapSize = std::pair<unsigned int, unsigned int>(mapSize.first * REAL_PIXEL_SIZE,
+                                                          mapSize.second * REAL_PIXEL_SIZE);
     configurationLoaded = false;
     loadConfiguration(configurationFile);
 }
@@ -20,6 +21,7 @@ void Manager::run()
 {
     if (configurationLoaded) {
 
+        checkForStateChanges();
         if (EnvObject::getState() == Started)
             action();
         QTimer::singleShot(PERFORM_ACTION_FREQUENCY, this, SLOT(run()));
@@ -32,10 +34,16 @@ void Manager::run()
 
 void Manager::action()
 {
-    for (unsigned int i = 0; i < envObjects.size(); i++) {
-
+    foreach (EnvObject* object, envObjects) {
         //TODO: implement action for each object
-        // it can be accessed by envObjects.at(i)
+
+        if (object->getCoords().first < mapSize.first - 2000
+                && object->getCoords().second < mapSize.second - 2000) {
+            object->changeDiameter(object->getSize() + 5);
+
+            object->move(object->getCoords().first + 100,
+                         object->getCoords().second + 100);
+        }
     }
 }
 
@@ -113,20 +121,18 @@ void Manager::loadConfiguration(QString configurationFile)
                 std::cout << "Invalid start position (object " << obj << " )";
                 return;
             }
-            if (x < 0 || y < 0 || x >= mapSize.first * REAL_PIXEL_SIZE
-                    || y >= mapSize.second * REAL_PIXEL_SIZE) {
+            if (x < 0 || y < 0 || x >= mapSize.first
+                    || y >= mapSize.second) {
                 std::cout << "Start position is out of the map (object " << obj << " )";
                 return;
             }
         } else {
 
             srand(static_cast<unsigned int>(time(0)));
-            x = rand() % (mapSize.first * REAL_PIXEL_SIZE);
-            y = rand() % (mapSize.second * REAL_PIXEL_SIZE);
+            x = rand() % mapSize.first;
+            y = rand() % mapSize.second;
             std::cout << "Object " << obj <<
                          " receives random coordinates ( " << x << ", " << y << " )";
-
-            //TODO: send generated coordiantes to simulator
         }
 
         // Check if size is a number and is over than zero
@@ -176,8 +182,7 @@ void Manager::loadConfiguration(QString configurationFile)
         indexes.push_back(index);
         EnvObject *envObject = new EnvObject(index, movable,
                                              static_cast<Intersection>(intersection.toInt()),
-                                             velocity);
-        envObject->move(x, y);
+                                             velocity, std::pair<int, int>(x, y));
         envObject->changeDiameter(size);
         envObject->turn(orientation);
         envObject->changeColor(color.red(), color.green(), color.blue());
@@ -189,8 +194,7 @@ void Manager::loadConfiguration(QString configurationFile)
 
 void Manager::checkForStateChanges()
 {
-    Message *msg = NULL;
-    msg = EnvObject::getNetwork()->receive();
+    Message *msg = EnvObject::getNetwork()->receive();
     if (msg && msg->type == MsgStart) {
         EnvObject::setState(Started);
     } else if (msg && msg->type == MsgPause) {
@@ -201,7 +205,7 @@ void Manager::checkForStateChanges()
         unsigned int object = m->envObjID;
         for (unsigned int i = 0; i < envObjects.size(); i++) {
             if (envObjects.at(i) != NULL && envObjects.at(i)->getObjectId() + 1 == object) {
-                envObjects.at(i)->move(m->coordX, m->coordY);
+                envObjects.at(i)->receiveBump(m);
             }
         }
     }

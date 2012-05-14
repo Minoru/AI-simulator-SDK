@@ -9,7 +9,8 @@
 class EnvObject
 {
 public:
-    EnvObject(unsigned int id, bool isMovable, Intersection intersectionType, unsigned int speed);
+    EnvObject(unsigned int id, bool isMovable, Intersection intersectionType, unsigned int speed,
+              std::pair<int, int> coordinates);
 
 private:
     unsigned int objectId;              //as one controller controls all envObjects,
@@ -31,10 +32,10 @@ public:
     void turn(double degrees);
     void changeDiameter(unsigned int diameter);
     void changeColor(int red, int green, int blue);
+    void receiveBump(MessageBump *message);
 
 private:
 
-    //static void checkForStateChanges();
     Message* waitForMessage();
 
 public:
@@ -95,51 +96,6 @@ public:
     }
 
     // Setters
-
-    /*
-    void setSize(int size)
-    {
-        this->size = size;
-    }
-
-    void setOrientation(double orientation)
-    {
-        if (orientation >= 360 || orientation < 0)
-            this->orientation = 0;
-        else
-            this->orientation = orientation;
-    }
-
-    void setColor(QColor color)
-    {
-        this->color = color;
-    }
-
-    void setCoords(int x, int y)
-    {
-        coords = std::pair<int, int>(x, y);
-    }
-
-    void setIntersection(Intersection intersection)
-    {
-        this->intersection = intersection;
-    }
-
-    void setMovable(bool movable)
-    {
-        this->movable = movable;
-    }
-
-    void setObjectId(unsigned int id)
-    {
-        objectId = id;
-    }
-
-    void setVelocity(unsigned int velocity)
-    {
-        this->velocity = velocity;
-    }
-    */
 
     static void setPortNumber(unsigned int port)
     {
