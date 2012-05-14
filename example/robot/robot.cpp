@@ -18,7 +18,7 @@ Robot::Robot():
     network = NULL;
 }
 
-/* Returns true if we bumped into something */
+/* Returns true if move was sucessful, false if we bumped into something */
 bool Robot::move(int x, int y)
 {
     // calculate new orientation
@@ -53,11 +53,11 @@ bool Robot::move(int x, int y)
     if (msg && msg->type == MsgBump) {
         MessageBump *m = static_cast<MessageBump *>(msg);
         coords = std::pair<int, int>(m->coordX, m->coordY);
-        return true;
+        return false;
     } else {
         if(msg) delete msg;
         coords = std::pair<int, int>(x, y);
-        return false;
+        return true;
     }
 }
 
