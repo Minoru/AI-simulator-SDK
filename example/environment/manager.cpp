@@ -39,7 +39,8 @@ void Manager::action()
 
         if (object->getCoords().first < mapSize.first - 2000
                 && object->getCoords().second < mapSize.second - 2000) {
-            object->changeDiameter(object->getSize() + 5);
+            if (object->getSize() <= 2000)
+                object->changeDiameter(object->getSize() + 5);
 
             object->move(object->getCoords().first + 100,
                          object->getCoords().second + 100);
