@@ -55,7 +55,7 @@ bool Robot::move(int x, int y)
         coords = std::pair<int, int>(m->coordX, m->coordY);
         return false;
     } else {
-        if(msg) delete msg;
+        delete msg;
         coords = std::pair<int, int>(x, y);
         return true;
     }
@@ -149,7 +149,7 @@ void Robot::checkForStateChanges()
         MessageBump *m = static_cast<MessageBump *>(msg);
         coords = std::pair<int, int>(m->coordX, m->coordY);
     }
-    if(msg) delete msg;
+    delete msg;
 }
 
 Message* Robot::waitForMessage()
@@ -160,7 +160,7 @@ Message* Robot::waitForMessage()
         if(m && m->type == MsgStart) {
             state = Started;
             delete m;
-        } else if (m && m->type == MsgPause) {
+        } else if(m && m->type == MsgPause) {
             state = Paused;
             delete m;
         } else {
