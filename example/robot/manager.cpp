@@ -5,7 +5,7 @@
 #include <time.h>
 #include <QDebug>
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include "manager.h"
 
 Manager::Manager(QObject *parent, QString configurationFile) :
