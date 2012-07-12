@@ -81,13 +81,13 @@ void Robot::changeDiameter(unsigned int diameter)
     size = diameter;
 }
 
-void Robot::changeColor(int red, int green, int blue)
+void Robot::changeColor(char red, char green, char blue)
 {
     MessageChangeColor m;
     m.envObjID = 0;
-    m.red = static_cast<char>(red);
-    m.green = static_cast<char>(green);
-    m.blue = static_cast<char>(blue);
+    m.red = red;
+    m.green = green;
+    m.blue = blue;
     network->send(&m);
 
     color = QColor(red, green, blue);
