@@ -21,6 +21,7 @@ private:
 
     Robot *robot;
     bool configurationLoaded;
+    bool bumped;
 };
 
 #endif // MANAGER_H

@@ -14,6 +14,7 @@ Manager::Manager(QObject *parent, QString configurationFile) :
     robot = new Robot();
 
     configurationLoaded = false;
+    bumped = false;
     loadConfiguration(configurationFile);
 }
 
@@ -39,26 +40,60 @@ void Manager::action()
 
     srand(static_cast<unsigned>(time(0)));
 
-    if (fabs(robot->getCoords().first - robot->getParameter(0)) <
-            robot->getParameter(2)
-            && fabs(robot->getCoords().second - robot->getParameter(1)) <
-            robot->getParameter(2)) {
-        robot->setParameter(0, 300 + rand() % 23400);
-        robot->setParameter(1, 300 + rand() % 23400);
-    } else {
-        double x1 = robot->getCoords().first;
-        double y1 = robot->getCoords().second;
-        double x2 = robot->getParameter(0);
-        double y2 = robot->getParameter(1);
-        double y;
-        double part = fabs(robot->getParameter(2)) / sqrt(pow((x2 - x1) / (y2 - y1), 2) + 1);
-        if (part + y1 < y2)
-            y = part + y1;
-        else
-            y = y1 - part;
-        double x = (x2 - x1) * (y - y1) / (y2 - y1) + x1;
-        robot->move(static_cast<int>(x), static_cast<int>(y));
+    switch(rand() % 20) {
+        case 0:
+            // change diameter
+            // 500 pixels in diameter is a limit
+            // add one to prevent zero size
+            robot->changeDiameter(1 + rand() % 500);
+            break;
+
+        case 1:
+            // change color
+            robot->changeColor(static_cast<char>(rand()),
+                static_cast<char>(rand()), static_cast<char>(rand()));
+            break;
+        
+        case 2:
+            // look around but no further than 300 pixels (and discard the result)
+            robot->whoIsThere(robot->getCoords().first, robot->getCoords().second, 300);
+            break;
+
+        case 3:
+            // turn somewhere
+            robot->turn(rand() % 360);
+            break;
+
+        default:
+            // move to the desired position or set a new one if the current one is reached
+            // if distance to the desired position is less than robot's step length (aka speed)
+            if ((fabs(robot->getCoords().first - robot->getParameter(0)) <
+                        robot->getParameter(2)
+                && fabs(robot->getCoords().second - robot->getParameter(1)) <
+                        robot->getParameter(2)) || bumped) {
+                // generate new desired position
+                robot->setParameter(0, 300 + rand() % 23400);
+                robot->setParameter(1, 300 + rand() % 23400);
+                // resetting the flag to guarantee some progress on the next iteration
+                bumped = false; 
+            } else {
+                // move closer to the desired position
+                double x1 = robot->getCoords().first;
+                double y1 = robot->getCoords().second;
+                double x2 = robot->getParameter(0);
+                double y2 = robot->getParameter(1);
+                double y;
+                double part = fabs(robot->getParameter(2)) /
+                        sqrt(pow((x2 - x1) / (y2 - y1), 2) + 1);
+                if (part + y1 < y2)
+                    y = part + y1;
+                else
+                    y = y1 - part;
+                double x = (x2 - x1) * (y - y1) / (y2 - y1) + x1;
+                bumped = ! robot->move(static_cast<int>(x), static_cast<int>(y));
+            }
     }
+    
 }
 
 void Manager::loadConfiguration(QString configurationFile)
